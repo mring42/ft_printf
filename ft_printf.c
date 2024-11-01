@@ -6,16 +6,50 @@
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 09:18:20 by mring             #+#    #+#             */
-/*   Updated: 2024/10/30 14:14:55 by mring            ###   ########.fr       */
+/*   Updated: 2024/11/01 15:24:25 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdarg.h>
+#include <unistd.h>
 
 int	ft_printf(const char *str, ...)
 {
-	return (*str);
+	va_list	args;
+	int		count;
+
+	va_start(args, str);
+	// cspdiuxX%
+	// -0.# +
+	// string loop logic
+	count = 0;
+	while (*str)
+	{
+		// if (*str == '%' && *str + 1 == '%')
+		// count += write(1, "%", 1);
+		if (*str == '%' && *str + 1 != '%')
+			count += write(1, "%", 1);
+		else
+			write(1, str, 1);
+		str++;
+		if (count == -1)
+		{
+			va_end(args);
+			return (-1);
+		}
+	}
+	va_end(args);
+	return (count);
 }
+
+/*
+Logic breakdown for bonus:
+
+#leading 0x, ignores + and - and space
+
+
+*/
 
 int	main(void)
 {
@@ -23,60 +57,139 @@ int	main(void)
 	// Use your brain and get that ft_printf going.
 	// ft_printf("ft: Fuck the %s\n", "SYSTEM");
 	printf("or: Fuck the %s\n", "SYSTEM");
+	ft_printf("ft: Fuck the %s\n", "SYSTEM");
+	ft_printf("space: Fuck the %s\n", "");
 	// Expected: "Hex (lower) with #: 0x2a"
-	printf("Hex (lower) with #: %#x\n", 42);
+	printf("Hex (lower) with #:                 %4.x\n", 42);
 	// Expected: "Hex (upper) with #: 0X2A"
-	printf("Hex (upper) with #: %#X\n", 42);
+	printf("Hex (upper) with #:                 %#X\n", 42);
 	// Expected: "Space flag:  42" // works as standalone
-	printf("Space flag: % d\n", 42);
+	printf("Space flag:                         % d\n", 42);
 	// Expected: "Negative with space: -42"
-	printf("Negative with space: % d\n", -42);
+	printf("Negative with space:                % d\n", -42);
 	// Expected: "Plus sign: +42"
-	printf("Plus sign: %+d\n", 42);
+	printf("Plus sign:                          %+d\n", 42);
 	// Expected: "Negative with plus: -42" // + is ignored
-	printf("Negative with plus: %+d\n", -42);
+	printf("Negative with plus:                 %+d\n", -42);
 	// Expected: "Hex with + and #: 0x2a" // ignores + in hex
-	printf("Hex with + and #: %#x\n", 42); // + unnecessary
+	printf("Hex with + and #:                   %#x\n", 42); // + unnecessary
 	// Expected: "Hex with space and #: 0x2a" // ignores space in hex
-	printf("Hex with space and #: %#x\n", 42); // space unnecessary
+	printf("Hex with space and #:               %#x\n", 42);
+	// space unnecessary
 	// Expected: "Space and plus: +42" // + overwrites space
-	printf("Space and plus: %+d\n", 42); // space unnecessary
+	printf("Space and plus:                     %+d\n", 42);
+	// space unnecessary
 	// Expected: "Pointer with: 0x2a" // can ignore #
-	printf("Pointer with #: %p\n", (void *)42);
+	printf("Pointer with #:                     %p\n", (void *)42);
 	// Testing #, 0, and - in combination with %x and %X
 	// Expected: "Hex with #:        0x2a"
-	printf("Hex with #: %#10x\n", 42);
+	printf("Hex with #:                         %#10x\n", 42);
 	// Expected: "Hex with 0 and #: 0x0000002a"
-	printf("Hex with 0 and #: %#010x\n", 42);
+	printf("Hex with 0 and #:                   %#010x\n", 42);
 	// Expected: "Hex left-aligned #: 0x2a      "
-	printf("Hex left-aligned #: %-#10x\n", 42);
+	printf("Hex left-aligned #:                 %-#10x\n", 42);
 	// Testing +, space, -, and 0 with signed integers
 	// Expected: "With space and width:      42"
-	printf("With space and width: % 10d\n", 42);
+	printf("With space and width:               % 10d\n", 42);
 	// Expected: "Plus with width:        +42"
-	printf("Plus with width: %+10d\n", 42);
+	printf("Plus with width:                    %+10d\n", 42);
 	// Expected: "Left-aligned plus: +42      "
-	printf("Left-aligned plus: %-+10d\n", 42);
+	printf("Left-aligned plus:                  %-+10d\n", 42);
 	// Expected: "Zero-padded plus: +00000042"
-	printf("Zero-padded plus: %+010d\n", 42);
-	// Expected: "Negative with zero: -00000042"
-	printf("Negative with zero: %010d\n", -42);
+	printf("Zero-padded plus:                   %+010d\n", 42);
+	// Expected: "Negative with  zero: -00000042"
+	printf("Negative with zero:                 %010d\n", -42);
 	// Testing precision (.) with +, space, and #
 	// Expected: "With precision: +0042"
-	printf("With precision: %+05.4d\n", 42);
+	printf("With precision:                     %+05.4d\n", 42);
 	// Expected: "With space and precision:   0042"
-	printf("With space and precision: % .4d\n", 42);
+	printf("With space and precision:           % .4d\n", 42);
 	// Testing # and precision with hex and integer
 	// Expected: "Hex with precision #: 0x00002a"
-	printf("Hex with precision #: %#.8x\n", 42);
+	printf("Hex with precision #:               %#.8x\n", 42);
 	// Expected: "Integer precision with 0 and width: 00000042"
 	printf("Integer precision with 0 and width: %010.8d\n", 42);
 	// Testing precision and width with -
 	// Expected: "Left-aligned, precision: 0042      "
-	printf("Left-aligned, precision: %-10.4d\n", 42);
+	printf("Left-aligned, precision:            %-10.4d\n", 42);
 	// Expected: "Pointer with precision: 0x0000002a"
-	printf("Pointer with precision: %10.8p\n", (void *)42);
+	printf("Pointer with precision:             %7.3p\n", (void *)42);
+	// that prints, starting from and including 0x,
+	// X amount of 0. 8? 0x000000. 2? 0x. 4? 0x00.
+	// the number before the . is the padding for the entire strlen
+	// if the min length is above the number its ignored
+	// if the number is > len, it prints spaces to the left.
+	// Outputs "    %" with four spaces padding the % on the left.
+	printf("|%5%\n");
+	// Outputs "%    " with four spaces padding on the right due to the left alignment.
+	printf("%-5%|\n");
 }
+
+/*
+	// you know how to use printf.
+	// Use your brain and get that ft_printf going.
+	// ft_printf("ft: Fuck the %s\n", "SYSTEM");
+	printf("or: Fuck the %s\n", "SYSTEM");
+	ft_printf("ft: Fuck the %s\n", "SYSTEM");
+	// Expected: "Hex (lower) with #: 0x2a"
+	printf("%%#x:     %#x\n", 42);
+	// Expected: "Hex (upper) with #: 0X2A"
+	printf("%%#X:     %#X\n", 42);
+	// Expected: "Space flag:  42" // works as standalone
+	printf("%% d:     % d\n", 42);
+	// Expected: "Negative with space: -42"
+	printf("%% d:     % d\n", -42);
+	// Expected: "Plus sign: +42"
+	printf("%%+d:     %+d\n", 42);
+	// Expected: "Negative with plus: -42" // + is ignored
+	printf("%%+d:     %+d\n", -42);
+	// Expected: "Hex with + and #: 0x2a" // ignores + in hex
+	printf("%%#d:     %#x\n", 42); // + unnecessary
+	// Expected: "Hex with space and #: 0x2a" // ignores space in hex
+	printf("%%#x:     %#x\n", 42); // space unnecessary
+	// Expected: "Space and plus: +42" // + overwrites space
+	printf("%%+d:     %+d\n", 42); // space unnecessary
+	// Expected: "Pointer with: 0x2a" // can ignore #
+	printf("%%p:      %p\n", (void *)42);
+	// Testing #, 0, and - in combination with %x and %X
+	// Expected: "Hex with #:        0x2a"
+	printf("%%#10x:   %#10x\n", 42);
+	// Expected: "Hex with 0 and #: 0x0000002a"
+	printf("%%#010x:  %#010x\n", 42);
+	// Expected: "Hex left-aligned #: 0x2a      "
+	printf("%%-#10x:  %-#10x\n", 42);
+	// Testing +, space, -, and 0 with signed integers
+	// Expected: "With space and width:      42"
+	printf("%% 10d:   % 10d\n", 42);
+	// Expected: "Plus with width:        +42"
+	printf("%%+10d:   %+10d\n", 42);
+	// Expected: "Left-aligned plus: +42      "
+	printf("%%-+10d:  %-+10d\n", 42);
+	// Expected: "Zero-padded plus: +00000042"
+	printf("%%+010d:  %+010d\n", 42);
+	// Expected: "Negative with zero: -00000042"
+	printf("%%010d:   %010d\n", -42);
+	// Testing precision (.) with +, space, and #
+	// Expected: "With precision: +0042"
+	printf("%%+05.4d: %+05.4d\n", 42);
+	// Expected: "With space and precision:   0042"
+	printf("%% .4d:   % .4d\n", 42);
+	// Testing # and precision with hex and integer
+	// Expected: "Hex with precision #: 0x00002a"
+	printf("%%#.8x:   %#.8x\n", 42);
+	// Expected: "Integer precision with 0 and width: 00000042"
+	printf("%%010.8d: %010.8d\n", 42);
+	// Testing precision and width with -
+	// Expected: "Left-aligned, precision: 0042      "
+	printf("%%-10.4d: %-10.4d\n", 42);
+	// Expected: "Pointer with precision: 0x0000002a"
+	printf("%%7.3p:   %7.3p\n", (void *)42);
+	// that prints, starting from and including 0x,
+	// X amount of 0. 8? 0x000000. 2? 0x. 4? 0x00.
+	// the number before the . is the padding for the entire strlen
+	// if the min length is above the number its ignored
+	// if the number is > len, it prints spaces to the left.
+	*/
 
 // Chapter I
 // Introduction
