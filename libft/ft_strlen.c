@@ -1,18 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 09:23:55 by mring             #+#    #+#             */
-/*   Updated: 2024/11/04 13:58:24 by mring            ###   ########.fr       */
+/*   Created: 2024/10/08 16:11:04 by mring             #+#    #+#             */
+/*   Updated: 2024/10/09 15:29:28 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-int	ft_printf(const char *, ...);
+int	ft_strlen(const char *str)
+{
+	int	count;
 
-#endif
+	count = 0;
+	while (str[count])
+		count++;
+	return (count);
+}
+
+// Counts the length of the string excluding \0
+
+// #include <stdio.h>
+// int	main(void)
+// {
+// 	char str[] = "four";
+// 	printf("%d\n", ft_strlen(str));
+// }

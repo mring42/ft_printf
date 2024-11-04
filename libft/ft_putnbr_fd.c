@@ -1,18 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 09:23:55 by mring             #+#    #+#             */
-/*   Updated: 2024/11/04 13:58:24 by mring            ###   ########.fr       */
+/*   Created: 2024/10/22 16:03:20 by mring             #+#    #+#             */
+/*   Updated: 2024/10/23 12:23:11 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-int	ft_printf(const char *, ...);
+void	ft_putnbr_fd(int n, int fd)
+{
+	char	digit;
 
-#endif
+	if (n == -2147483648)
+		write(fd, "-2147483648", 11);
+	else if (n < 0)
+	{
+		n = -n;
+		write(fd, "-", 1);
+	}
+	if (n >= 10)
+	{
+		ft_putnbr_fd(n / 10, fd);
+		ft_putnbr_fd(n % 10, fd);
+	}
+	else if (n >= 0)
+	{
+		digit = n + '0';
+		write(fd, &digit, 1);
+	}
+}
+
+// int	main(void)
+// {
+// 	int n = 0;
+// 	ft_putnbr_fd(n, 1);
+// }

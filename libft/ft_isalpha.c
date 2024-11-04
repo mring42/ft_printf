@@ -1,18 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 09:23:55 by mring             #+#    #+#             */
-/*   Updated: 2024/11/04 13:58:24 by mring            ###   ########.fr       */
+/*   Created: 2024/10/08 11:28:29 by mring             #+#    #+#             */
+/*   Updated: 2024/10/09 15:29:04 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-int	ft_printf(const char *, ...);
+int	ft_isalpha(int alpha)
+{
+	if (alpha >= 'a' && alpha <= 'z')
+		return (2);
+	return (alpha >= 'A' && alpha <= 'Z');
+}
 
-#endif
+// checks if a character is alpha
+
+// #include <stdio.h>
+// int	main(void)
+// {
+// 	printf("Smol: %d\n", ft_isalpha('a'));
+// 	printf("Beeg: %d\n", ft_isalpha('A'));
+// 	printf("Nooo: %d\n", ft_isalpha('3'));
+// }

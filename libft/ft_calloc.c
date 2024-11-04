@@ -1,18 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 09:23:55 by mring             #+#    #+#             */
-/*   Updated: 2024/11/04 13:58:24 by mring            ###   ########.fr       */
+/*   Created: 2024/10/11 14:08:39 by mring             #+#    #+#             */
+/*   Updated: 2024/10/11 14:33:54 by mring            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "libft.h"
 
-int	ft_printf(const char *, ...);
+void	*ft_calloc(size_t count, size_t size)
+{
+	unsigned char	*tmp;
+	size_t			i;
 
-#endif
+	i = 0;
+	tmp = malloc(count * size);
+	if (!tmp)
+		return (NULL);
+	while (i < count * size)
+		tmp[i++] = 0;
+	return (tmp);
+}

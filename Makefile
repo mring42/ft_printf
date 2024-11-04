@@ -6,35 +6,49 @@
 #    By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/29 10:16:09 by mring             #+#    #+#              #
-#    Updated: 2024/10/29 10:16:11 by mring            ###   ########.fr        #
+#    Updated: 2024/11/04 13:38:14 by mring            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	= libftprintf.a
+NAME		= libftprintf.a
 
-SRCS	= ft_printf.c ft_printf_print.c
+CFLAGS		= -Wall -Wextra -Werror
 
-HEADERS = ft_printf.h
+SRC			= ft_printf #ft_printf_print.c
+SRCS		= $(addsuffix .c, $(SRC))
 
-OBJECTS	= ${SRCS:.c=.o}
+OBJ_DIR		= obj
+OBJS		= $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
-CFLAGS	= -Wall -Wextra -Werror
+LIBFT_PATH	=	./libft
+LIBFT		=	$(LIBFT_PATH)/libft.a
 
-%.o: %.c $(HEADERS) Makefile
-	$(CC) -c ${CFLAGS} -o $@ $<
-
-${NAME}: ${OBJECTS}
-	ar rc ${NAME} ${OBJECTS}
-	ranlib ${NAME}
+$(OBJ_DIR)/%.o: %.c
+				@$(CC) ${CFLAGS} -c $< -o $@
 
 all: ${NAME}
 
+${NAME}: 		$(LIBFT) $(OBJ_DIR) $(OBJS)
+			@cp	$(LIBFT) $(NAME)
+			@ar rcs ${NAME} ${OBJS}
+			@echo "/// $(NAME) compiled ///"
+
+$(LIBFT):
+				@make -C $(LIBFT_PATH) all
+
+$(OBJ_DIR):
+				@mkdir -p $(OBJ_DIR)
+
 clean:
-	rm -f ${OBJECTS}
+				@make -C $(LIBFT_PATH) clean
+				@rm -rf ${OBJ_DIR}
+				@echo "/// cleanin printf ///"
 
-fclean: clean
-	rm -f ${NAME}
+fclean: 		clean
+				@make -C $(LIBFT_PATH) fclean
+				@rm -f ${NAME}
+				@echo "/// fcleanin printf ///"
 
-re: fclean all
+re: 			fclean all
 
-.PHONY:		all clean fclean re
+.PHONY:			all clean fclean re libft
