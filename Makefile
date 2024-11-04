@@ -6,7 +6,7 @@
 #    By: mring <mring@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/29 10:16:09 by mring             #+#    #+#              #
-#    Updated: 2024/11/04 13:38:14 by mring            ###   ########.fr        #
+#    Updated: 2024/11/04 14:55:47 by mring            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,8 @@ $(OBJ_DIR)/%.o: %.c
 				@$(CC) ${CFLAGS} -c $< -o $@
 
 all: ${NAME}
+
+bonus: all
 
 ${NAME}: 		$(LIBFT) $(OBJ_DIR) $(OBJS)
 			@cp	$(LIBFT) $(NAME)
@@ -51,4 +53,4 @@ fclean: 		clean
 
 re: 			fclean all
 
-.PHONY:			all clean fclean re libft
+.PHONY:			all bonus clean fclean re libft
